@@ -22,7 +22,7 @@ Checkout OpenWrt from svn (tested with r27259):
 Change feeds setup to inculde reference to this feed:
 
     cp feeds.conf.default feeds.conf
-    echo "src-link ola /var/local/build/ola-openwrt-feed" >> feeds.conf
+    echo "src-git ola git://github.com/mmm444/ola-openwrt-feed.git" >> feeds.conf
 
 Update the feeds:
 
