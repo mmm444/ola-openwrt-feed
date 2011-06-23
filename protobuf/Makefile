@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://protobuf.googlecode.com/files
 PKG_MD5SUM:=dc84e9912ea768baa1976cb7bbcea7b5
 
-# PKG_BUILD_DEPENDS:=protobuf/host
+PKG_BUILD_DEPENDS:=protobuf/host
 
 PKG_INSTALL:=1
 
