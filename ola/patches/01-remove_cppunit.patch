@@ -30,19 +30,18 @@ index 38f4474..e8118b7 100644
 -LoggingTester_LDFLAGS = $(CPPUNIT_LIBS)
 -LoggingTester_LDADD = ./liblogging.la ../utils/libolautils.la
 diff --git a/common/network/Makefile.am b/common/network/Makefile.am
-index 2360c58..d153227 100644
+index f5e37d8..90c26ba 100644
 --- a/common/network/Makefile.am
 +++ b/common/network/Makefile.am
-@@ -11,19 +11,3 @@ libolanetwork_la_SOURCES += PosixInterfacePicker.cpp
- endif
+@@ -12,18 +12,3 @@ endif
  
  EXTRA_DIST = PosixInterfacePicker.h WindowsInterfacePicker.h
--
+ 
 -TESTS = NetworkTester
 -check_PROGRAMS = $(TESTS)
--NetworkTester_SOURCES = SelectServerTester.cpp SocketTest.cpp \
--                        NetworkTest.cpp NetworkUtilsTest.cpp \
--                        InterfacePickerTest.cpp
+-NetworkTester_SOURCES = IPAddressTest.cpp InterfacePickerTest.cpp \
+-                        SelectServerTester.cpp SocketTest.cpp \
+-                        NetworkTest.cpp NetworkUtilsTest.cpp
 -NetworkTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
 -NetworkTester_LDFLAGS = $(CPPUNIT_LIBS)
 -NetworkTester_LDADD = ./libolanetwork.la \
@@ -71,10 +70,10 @@ index 21a5dfd..620706d 100644
 -RDMTester_LDADD = libolardm.la ../logging/liblogging.la \
 -                  ../network/libolanetwork.la ../utils/libolautils.la
 diff --git a/common/rpc/Makefile.am b/common/rpc/Makefile.am
-index efd3af6..8160906 100644
+index ac82a2f..5c3a01b 100644
 --- a/common/rpc/Makefile.am
 +++ b/common/rpc/Makefile.am
-@@ -15,19 +15,6 @@ Rpc.pb.cc Rpc.pb.h: Rpc.proto
+@@ -16,19 +16,6 @@ Rpc.pb.cc Rpc.pb.h: Rpc.proto
  TestService.pb.cc TestService.pb.h: TestService.proto
  	$(PROTOC) --cpp_out ./ TestService.proto
  
@@ -84,7 +83,7 @@ index efd3af6..8160906 100644
 -                    StreamRpcChannelTest.cpp StreamRpcHeaderTest.cpp
 -nodist_RpcTester_SOURCES = TestService.pb.cc
 -RpcTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
--RpcTester_LDFLAGS = $(CPPUNIT_LIBS) -lprotobuf
+-RpcTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
 -RpcTester_LDADD = ./libstreamrpcchannel.la \
 -                  ../export_map/libolaexportmap.la \
 -                  ../logging/liblogging.la \
@@ -128,10 +127,10 @@ index c2dc8ff..684938b 100644
 -WebTester_LDFLAGS = $(CPPUNIT_LIBS)
 -WebTester_LDADD = libolaweb.la ../logging/liblogging.la ../utils/libolautils.la
 diff --git a/configure.ac b/configure.ac
-index b6c2b32..becfe49 100644
+index 9f5c9a9..b7fff38 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -243,12 +243,6 @@ AC_SUBST(pid_datadir)
+@@ -247,12 +247,6 @@ AC_SUBST(pid_datadir)
  OLAD_DEFINES="-DHTTP_DATA_DIR=\\\"$www_datadir\\\" -DPLUGIN_DIR=\\\"$plugindir\\\" "
  AC_SUBST(OLAD_DEFINES)
  
@@ -145,21 +144,20 @@ index b6c2b32..becfe49 100644
  AC_ARG_ENABLE(gcov,
                AC_HELP_STRING([--enable-gcov],
 diff --git a/ola/Makefile.am b/ola/Makefile.am
-index d0e52bb..cea0dd0 100644
+index 4aa6064..a221bb8 100644
 --- a/ola/Makefile.am
 +++ b/ola/Makefile.am
-@@ -14,19 +14,6 @@ pkginclude_HEADERS = $(HEADER_FILES)
- 
+@@ -15,18 +15,6 @@ pkginclude_HEADERS = $(HEADER_FILES)
  EXTRA_DIST = $(HEADER_FILES) OlaClientCore.h common-h.in
  
--
+ 
 -# Test Programs
 -TESTS = OlaClientTester
 -check_PROGRAMS = $(TESTS)
 -OlaClientTester_SOURCES = $(OLASERVER_SOURCES) OlaClientTester.cpp \
 -                          StreamingClientTest.cpp
 -OlaClientTester_CXXFLAGS = $(CPPUNIT_CFLAGS) $(libusb_CFLAGS)
--OlaClientTester_LDFLAGS = $(CPPUNIT_LIBS) -ldl -lprotobuf
+-OlaClientTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
 -OlaClientTester_LDADD = @LIBS@ ${PLUGIN_LIBS} \
 -                        $(top_builddir)/common/libolacommon.la \
 -                        $(top_builddir)/olad/libolaserver.la \
@@ -169,11 +167,11 @@ index d0e52bb..cea0dd0 100644
  ## @start 2
  # Regenerate common.h with config.status whenever common-h.in changes.
 diff --git a/olad/Makefile.am b/olad/Makefile.am
-index b4739ea..d25f0d4 100644
+index e752133..3cdc729 100644
 --- a/olad/Makefile.am
 +++ b/olad/Makefile.am
 @@ -45,16 +45,3 @@ olad_CXXFLAGS = -Wall -Wformat -W
- olad_LDFLAGS = -rdynamic -ldl -lprotobuf $(UUID_LIBS)
+ olad_LDFLAGS = -rdynamic -ldl $(PROTOBUF_LIBS) $(UUID_LIBS)
  olad_LDADD = @LIBS@ libolaserver.la \
               $(top_builddir)/common/libolacommon.la
 -
@@ -190,10 +188,10 @@ index b4739ea..d25f0d4 100644
 -OlaTester_LDADD = @LIBS@ $(top_builddir)/olad/libolaserver.la \
 -                  $(top_builddir)/common/libolacommon.la
 diff --git a/plugins/artnet/Makefile.am b/plugins/artnet/Makefile.am
-index 1c60843..7204ac8 100644
+index d569643..7204ac8 100644
 --- a/plugins/artnet/Makefile.am
 +++ b/plugins/artnet/Makefile.am
-@@ -11,16 +11,3 @@ libolaartnetnode_la_SOURCES = ArtNetNode.cpp
+@@ -11,15 +11,3 @@ libolaartnetnode_la_SOURCES = ArtNetNode.cpp
  lib_LTLIBRARIES = libolaartnet.la
  libolaartnet_la_SOURCES = ArtNetPlugin.cpp ArtNetDevice.cpp ArtNetPort.cpp
  libolaartnet_la_LIBADD = ./libolaartnetnode.la messages/libolaartnetconf.la
@@ -206,30 +204,29 @@ index 1c60843..7204ac8 100644
 -                       MockUdpSocket.cpp
 -
 -ArtNetTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
--ArtNetTester_LDFLAGS = $(CPPUNIT_LIBS)
--ArtNetTester_LDADD = -lprotobuf \
--                     ./libolaartnetnode.la \
+-ArtNetTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
+-ArtNetTester_LDADD = ./libolaartnetnode.la \
 -                     ../../common/libolacommon.la
 diff --git a/plugins/dummy/Makefile.am b/plugins/dummy/Makefile.am
-index 11c5330..a7e81b6 100644
+index e7e89c4..167b0c4 100644
 --- a/plugins/dummy/Makefile.am
 +++ b/plugins/dummy/Makefile.am
-@@ -6,13 +6,3 @@ EXTRA_DIST = DummyPlugin.h DummyDevice.h DummyPort.h
- lib_LTLIBRARIES = liboladummy.la
+@@ -9,13 +9,3 @@ liboladummyresponder_la_LIBADD = @LIBS@
+ 
  liboladummy_la_SOURCES =  DummyPlugin.cpp DummyDevice.cpp DummyPort.cpp
- liboladummy_la_LIBADD = @LIBS@
+ liboladummy_la_LIBADD = @LIBS@ ./liboladummyresponder.la
 -
 -TESTS = DummyPluginTester
 -check_PROGRAMS = $(TESTS)
 -DummyPluginTester_SOURCES = DummyPluginTester.cpp DummyPortTest.cpp
 -DummyPluginTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
--DummyPluginTester_LDFLAGS = $(CPPUNIT_LIBS) -ldl -lprotobuf
+-DummyPluginTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
 -DummyPluginTester_LDADD = @LIBS@ \
 -                          ./liboladummy.la \
 -                          $(top_builddir)/common/libolacommon.la \
 -                          $(top_builddir)/olad/libolaserver.la
 diff --git a/plugins/espnet/Makefile.am b/plugins/espnet/Makefile.am
-index 46ef33d..86efcf8 100644
+index c0484e8..86efcf8 100644
 --- a/plugins/espnet/Makefile.am
 +++ b/plugins/espnet/Makefile.am
 @@ -8,12 +8,3 @@ lib_LTLIBRARIES = libolaespnet.la
@@ -243,10 +240,10 @@ index 46ef33d..86efcf8 100644
 -EspNetTester_SOURCES = EspNetTester.cpp RunLengthDecoderTest.cpp \
 -                       RunLengthDecoder.cpp
 -EspNetTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
--EspNetTester_LDFLAGS = $(CPPUNIT_LIBS)
--EspNetTester_LDADD = @LIBS@ -lprotobuf ../../common/libolacommon.la
+-EspNetTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
+-EspNetTester_LDADD = @LIBS@ ../../common/libolacommon.la
 diff --git a/plugins/shownet/Makefile.am b/plugins/shownet/Makefile.am
-index 658aec4..e9e4b54 100644
+index 5653ce1..e9e4b54 100644
 --- a/plugins/shownet/Makefile.am
 +++ b/plugins/shownet/Makefile.am
 @@ -9,12 +9,3 @@ lib_LTLIBRARIES = libolashownet.la
@@ -260,13 +257,13 @@ index 658aec4..e9e4b54 100644
 -ShowNetTester_SOURCES = ShowNetTester.cpp \
 -                        ShowNetNode.cpp ShowNetNodeTest.cpp
 -ShowNetTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
--ShowNetTester_LDFLAGS = $(CPPUNIT_LIBS)
--ShowNetTester_LDADD = @LIBS@ -lprotobuf ../../common/libolacommon.la
+-ShowNetTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
+-ShowNetTester_LDADD = @LIBS@ ../../common/libolacommon.la
 diff --git a/plugins/usbpro/Makefile.am b/plugins/usbpro/Makefile.am
-index 2d5f801..31c7411 100644
+index 4eb24d3..31c7411 100644
 --- a/plugins/usbpro/Makefile.am
 +++ b/plugins/usbpro/Makefile.am
-@@ -18,22 +18,3 @@ libolausbpro_la_SOURCES = ArduinoRGBDevice.cpp DmxTriDevice.cpp \
+@@ -18,21 +18,3 @@ libolausbpro_la_SOURCES = ArduinoRGBDevice.cpp DmxTriDevice.cpp \
                            DmxterDevice.cpp UsbProDevice.cpp \
                            UsbProPlugin.cpp
  libolausbpro_la_LIBADD = ./libolausbprowidget.la messages/libolausbproconf.la
@@ -285,7 +282,6 @@ index 2d5f801..31c7411 100644
 -                       WidgetDetectorTest.cpp
 -
 -UsbProTester_CXXFLAGS = $(CPPUNIT_CFLAGS)
--UsbProTester_LDFLAGS = $(CPPUNIT_LIBS)
--UsbProTester_LDADD = -lprotobuf \
--                     ./libolausbprowidget.la \
+-UsbProTester_LDFLAGS = $(CPPUNIT_LIBS) $(PROTOBUF_LIBS)
+-UsbProTester_LDADD = ./libolausbprowidget.la \
 -                     ../../common/libolacommon.la

@@ -1,8 +1,8 @@
 diff --git a/olad/Olad.cpp b/olad/Olad.cpp
-index 92c5c10..eaf4ab7 100644
+index 6121463..6a8462c 100644
 --- a/olad/Olad.cpp
 +++ b/olad/Olad.cpp
-@@ -377,11 +377,6 @@ int main(int argc, char *argv[]) {
+@@ -392,11 +392,6 @@ int main(int argc, char *argv[]) {
    ola::ExportMap export_map;
    Setup(argc, argv, &opts);
  
