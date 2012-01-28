@@ -1,11 +1,15 @@
 diff --git a/common.mk b/common.mk
-index 568934e..3db139a 100644
+index 91e49af..0393504 100644
 --- a/common.mk
 +++ b/common.mk
-@@ -1,6 +1 @@
- AM_CPPFLAGS = -I$(top_builddir)/include -Wall -Wformat -W
--
--# the genererate protobuf files don't compile with -Werror on win32
+@@ -5,10 +5,5 @@ WARNING_CXXFLAGS = -I$(top_builddir)/include \
+ 
+ COMMON_CXXFLAGS = $(WARNING_CXXFLAGS)
+ 
+-# the genererated protobuf files don't compile with -Werror on win32
 -if USING_WIN32_FALSE
--  AM_CPPFLAGS += -Werror
+-  COMMON_CXXFLAGS += -Werror
 -endif
+-
+ # AM_CXXFLAGS is used when target_CXXFLAGS isn't defined
+ AM_CXXFLAGS = $(COMMON_CXXFLAGS)
