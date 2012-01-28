@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://linux-lighting.googlecode.com/files
-PKG_MD5SUM:=4a02b43ea8fcd1be1cd72c76526df836
+PKG_MD5SUM:=29a902f3415e2d6f441b205e955e6447
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
