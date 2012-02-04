@@ -27,13 +27,17 @@ define Package/ola
   CATEGORY:=Open Lighting Architecture
   TITLE:=Open Lighting Architecture Daemon
   URL:=http://code.google.com/p/linux-lighting/
-  DEPENDS:=+libartnet +libprotobuf +libmicrohttpd +libusb-1.0 +libuuid +libstdcpp +libpthread +librt +zlib
+  DEPENDS:=+libartnet +libprotobuf +libmicrohttpd +libusb-1.0 +libuuid +libstdcpp +libpthread +librt +zlib +libncurses
 endef
 
 define Package/ola/description
   OLA (Open Lighting Architecture) is a framework that allows applications to 
   send and receive DMX512, using various hardware devices and 'DMX over IP'
   protocols. It enables software controllers talk to DMX hardware.
+endef
+
+define Build/Configure
+  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp)
 endef
 
 define Package/ola/install
