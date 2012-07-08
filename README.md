@@ -4,6 +4,8 @@ OLA OpenWrt Feed
 This allows to compile and run [OLA](http://www.opendmx.net/index.php/Open_Lighting_Architecture)
 on the [OpenWrt](https://openwrt.org/) Linux distribution. It has been successfully tested with the Asus WL-500W router.
 
+In addition, a [boblight](https://code.google.com/p/boblight/)-fork with ola-support is also included. There's already an issue to [integrate ola support into boblight](https://code.google.com/p/boblight/issues/detail?id=9).
+
 Please see the OpenWrt documentation at http://wiki.openwrt.org/doc/start and especially http://wiki.openwrt.org/doc/howto/build to better understand how this works.
 
 _Patches and comments are welcome!_
