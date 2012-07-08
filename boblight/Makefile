@@ -82,7 +82,7 @@ define Package/libboblight
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS+= +libstdcpp
+  DEPENDS+= +libstdcpp +libprotobuf +ola
 endef
 
 define Package/libboblight/description
