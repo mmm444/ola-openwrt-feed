@@ -34,33 +34,46 @@ diff --git a/common/network/Makefile.am b/common/network/Makefile.am
 index a64b7bd..e376c4c 100644
 --- a/common/network/Makefile.am
 +++ b/common/network/Makefile.am
-@@ -11,21 +11,3 @@ libolanetwork_la_SOURCES += PosixInterfacePicker.cpp
+@@ -17,34 +17,3 @@
  endif
- 
+
  EXTRA_DIST = PosixInterfacePicker.h WindowsInterfacePicker.h
 -
--TESTS = NetworkTester
+-TESTS = HealthCheckedConnectionTester NetworkTester TCPConnectorTester
 -check_PROGRAMS = $(TESTS)
--NetworkTester_SOURCES = IPAddressTest.cpp InterfaceTest.cpp \
--                        InterfacePickerTest.cpp SelectServerTester.cpp \
--                        SocketTest.cpp SelectServerTest.cpp \
--                        NetworkUtilsTest.cpp SelectServerThreadTest.cpp
+-
+-# required for all tests
+-COMMON_TEST_LDADD = $(CPPUNIT_LIBS) \
+-                    ../libolacommon.la
+-
+-HealthCheckedConnectionTester_SOURCES = HealthCheckedConnectionTest.cpp \
+-                                        HealthCheckedConnectionTester.cpp
+-HealthCheckedConnectionTester_CXXFLAGS = $(COMMON_CXXFLAGS) $(CPPUNIT_CFLAGS)
+-HealthCheckedConnectionTester_LDADD = $(COMMON_TEST_LDADD)
+-
+-NetworkTester_SOURCES = IPAddressTest.cpp \
+-                        InterfacePickerTest.cpp \
+-                        InterfaceTest.cpp \
+-                        NetworkUtilsTest.cpp \
+-                        NetworkTester.cpp \
+-                        SocketTest.cpp
 -NetworkTester_CXXFLAGS = $(COMMON_CXXFLAGS) $(CPPUNIT_CFLAGS)
--NetworkTester_LDADD = $(CPPUNIT_LIBS) \
--                      ./libolanetwork.la \
--                      ../export_map/libolaexportmap.la \
--                      ../logging/liblogging.la \
--                      ../thread/libthread.la \
--                      ../utils/libolautils.la
+-NetworkTester_LDADD = $(COMMON_TEST_LDADD)
 -
 -if USING_WIN32
 -  NetworkTester_LDFLAGS = -no-undefined -liphlpapi -lnetapi32 -lcap -lws2_32 -ldpnet -lwsock32
 -endif
+-
+-TCPConnectorTester_SOURCES = AdvancedTCPConnectorTest.cpp \
+-                             TCPConnectorTest.cpp \
+-                             TCPConnectorTester.cpp
+-TCPConnectorTester_CXXFLAGS = $(COMMON_CXXFLAGS) $(CPPUNIT_CFLAGS)
+-TCPConnectorTester_LDADD = $(COMMON_TEST_LDADD)
 diff --git a/common/rdm/Makefile.am b/common/rdm/Makefile.am
 index 506b553..ab6f2e9 100644
 --- a/common/rdm/Makefile.am
 +++ b/common/rdm/Makefile.am
-@@ -19,49 +19,6 @@ libolardm_la_SOURCES = DescriptorConsistencyChecker.cpp \
+@ -20,56 +20,8 @@
  nodist_libolardm_la_SOURCES = Pids.pb.cc
  libolardm_la_LIBADD = $(libprotobuf_LIBS)
  
@@ -79,8 +92,10 @@ index 506b553..ab6f2e9 100644
 -RDMTester_CXXFLAGS = $(COMMON_CXXFLAGS) $(CPPUNIT_CFLAGS)
 -RDMTester_LDADD = $(CPPUNIT_LIBS) \
 -                  libolardm.la \
+-                  ../io/libolaio.la \
 -                  ../logging/liblogging.la \
 -                  ../network/libolanetwork.la \
+-                  ../testing/libolatesting.la \
 -                  ../utils/libolautils.la
 -
 -PidStoreTester_SOURCES = DescriptorConsistencyCheckerTest.cpp \
@@ -108,13 +123,19 @@ index 506b553..ab6f2e9 100644
 -                          ../utils/libolautils.la
 -
  Pids.pb.cc Pids.pb.h: Pids.proto
- 	$(PROTOC) --cpp_out ./ Pids.proto
+        $(PROTOC) --cpp_out ./ Pids.proto
  
+-TestService.pb.cc TestService.pb.h: TestService.proto
+-       $(PROTOC) --cpp_out ./ TestService.proto
+-
+ clean-local:
+        rm -f *.pb.{h,cc}
+
 diff --git a/common/rpc/Makefile.am b/common/rpc/Makefile.am
 index 0ef1274..54ddeb2 100644
 --- a/common/rpc/Makefile.am
 +++ b/common/rpc/Makefile.am
-@@ -16,22 +16,6 @@ Rpc.pb.cc Rpc.pb.h: Rpc.proto
+@@ -16,23 +16,6 @@
  TestService.pb.cc TestService.pb.h: TestService.proto
  	$(PROTOC) --cpp_out ./ TestService.proto
  
@@ -129,6 +150,7 @@ index 0ef1274..54ddeb2 100644
 -RpcTester_LDADD = $(CPPUNIT_LIBS) \
 -                  ./libstreamrpcchannel.la \
 -                  ../export_map/libolaexportmap.la \
+-                  ../io/libolaio.la \
 -                  ../logging/liblogging.la \
 -                  ../network/libolanetwork.la \
 -                  ../thread/libthread.la \
@@ -340,3 +362,11 @@ index 417c6d2..15db9b5 100644
 -SerialUsbTester_CXXFLAGS = $(COMMON_CXXFLAGS) $(CPPUNIT_CFLAGS)
 -SerialUsbTester_LDADD = $(CPPUNIT_LIBS) \
 -                        ./libolausbprowidget.la
+--- a/common/Makefile.am
++++ b/common/Makefile.am
+@@ -13,4 +13,4 @@
+                          utils/libolautils.la
+ 
+ SUBDIRS = export_map io logging protocol rdm rpc network utils web messaging \
+-          thread testing timecode
++          thread timecode

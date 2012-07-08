@@ -8,15 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ola
-PKG_VERSION:=0.8.18
+PKG_VERSION:=0.8.20
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://linux-lighting.googlecode.com/files
-PKG_MD5SUM:=45310779932a2e015fa335e2f541438a
+PKG_MD5SUM:=421983a8e8d04540d5c769bfda0da3d7
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+
+PKG_BUILD_PARALLEL:=1
 
 PKG_BUILD_DEPENDS:=protobuf/host
 
@@ -37,7 +39,16 @@ define Package/ola/description
 endef
 
 define Build/Configure
-  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp)
+  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp --disable-root-check)
+endef
+
+define Build/InstallDev
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/ola $(1)/usr/include/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/olad $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 define Package/ola/install
