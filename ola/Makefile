@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ola
-PKG_VERSION:=0.8.20
+PKG_VERSION:=0.8.21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://linux-lighting.googlecode.com/files
-PKG_MD5SUM:=421983a8e8d04540d5c769bfda0da3d7
+PKG_SOURCE_URL:=http://open-lighting.googlecode.com/files
+PKG_MD5SUM:=bb107dfbdcd0e1960b3d13446afeaabb
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -39,7 +39,7 @@ define Package/ola/description
 endef
 
 define Build/Configure
-  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp --disable-root-check)
+  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp --disable-root-check --disable-fatal-warnings)
 endef
 
 define Build/InstallDev
