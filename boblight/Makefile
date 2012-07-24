@@ -8,18 +8,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=boblight
-PKG_REV:=f1ea7ff60f12b945e5bb5f39f7d4fcdad1e07ca1
-PKG_VERSION:=20120708
+PKG_REV:=444
+PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=git://github.com/doits/boblight.git
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://boblight.googlecode.com/svn/trunk
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_PROTO:=git
+PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 PKG_INSTALL:=1
 PKG_FIXUP:=autoreconf
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
