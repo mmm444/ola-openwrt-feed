@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ola
-PKG_VERSION:=0.8.21
+PKG_VERSION:=0.8.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://open-lighting.googlecode.com/files
-PKG_MD5SUM:=bb107dfbdcd0e1960b3d13446afeaabb
+PKG_MD5SUM:=657ed840a23cd154487c7a08f812cce8
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -23,6 +23,13 @@ PKG_BUILD_PARALLEL:=1
 PKG_BUILD_DEPENDS:=protobuf/host
 
 include $(INCLUDE_DIR)/package.mk
+
+#PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
+#define Build/Prepare
+#	rm -r $(PKG_BUILD_DIR)
+#	mkdir -p $(PKG_BUILD_DIR)
+#	$(CP) /home/markus/svn/open-lighting/** $(PKG_BUILD_DIR)/
+#endef
 
 define Package/ola
   SECTION:=ola
@@ -39,7 +46,7 @@ define Package/ola/description
 endef
 
 define Build/Configure
-  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp --disable-root-check --disable-fatal-warnings)
+  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp --disable-root-check --disable-fatal-warnings --disable-unittests)
 endef
 
 define Build/InstallDev
