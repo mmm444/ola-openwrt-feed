@@ -23,6 +23,7 @@ PKG_FIXUP:=autoreconf
 
 PKG_BUILD_PARALLEL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS+=-fpermissive
@@ -32,7 +33,7 @@ define Package/boblight/Default
   CATEGORY:=Utilities
   TITLE:=Tools for driving lights connected to an external controller
   URL:=http://code.google.com/p/boblight/
-  DEPENDS:=+librt +uclibcxx
+  DEPENDS:=+librt $(CXX_DEPENDS)
 endef
 
 define Package/boblight/Default/description
@@ -84,7 +85,7 @@ define Package/libboblight
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS+= +libstdcpp +libprotobuf +ola
+  DEPENDS+= +libstdcpp +protobuf +ola
 endef
 
 define Package/libboblight/description

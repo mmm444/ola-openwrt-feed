@@ -20,7 +20,7 @@ PKG_INSTALL:=1
 
 PKG_BUILD_PARALLEL:=1
 
-PKG_BUILD_DEPENDS:=protobuf/host
+PKG_BUILD_DEPENDS:=protobuf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,7 +36,7 @@ define Package/ola
   CATEGORY:=Open Lighting Architecture
   TITLE:=Open Lighting Architecture Daemon
   URL:=http://code.google.com/p/linux-lighting/
-  DEPENDS:=+libartnet +libprotobuf +libmicrohttpd +libusb-1.0 +libuuid +libstdcpp +libpthread +librt +zlib +libncurses
+  DEPENDS:=+libartnet +protobuf +libmicrohttpd +libusb-1.0 +libuuid +libstdcpp +libpthread +librt +zlib +libncurses
 endef
 
 define Package/ola/description
