@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ola
-PKG_VERSION:=0.8.22
+PKG_VERSION:=0.8.23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://open-lighting.googlecode.com/files
-PKG_MD5SUM:=657ed840a23cd154487c7a08f812cce8
+PKG_SHA1SUM:=f182472f1f40bb51c8dcfcdf25478470da36669b
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1

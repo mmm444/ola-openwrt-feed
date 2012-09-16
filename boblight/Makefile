@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=boblight
-PKG_REV:=446
+PKG_REV:=449
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
