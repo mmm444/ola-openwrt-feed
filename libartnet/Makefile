@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libartnet
-PKG_VERSION:=1.1.0
+PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://linux-lighting.googlecode.com/files
-PKG_MD5SUM:=3456ecdbf10b58fef3488fe2c4125508
+PKG_SOURCE_URL:=http://open-lighting.googlecode.com/files
+PKG_SHA1SUM:=52835fb4860033b0719de24ee32c649ce9828730
 
 include $(INCLUDE_DIR)/package.mk
 
