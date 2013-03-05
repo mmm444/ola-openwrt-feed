@@ -8,32 +8,54 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ola
-PKG_VERSION:=0.8.11
+PKG_VERSION:=0.8.25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://linux-lighting.googlecode.com/files
-PKG_MD5SUM:=4a02b43ea8fcd1be1cd72c76526df836
+PKG_SOURCE_URL:=http://open-lighting.googlecode.com/files
+PKG_SHA1SUM:=803b5e67bbebb73088e2408ef65419ef17d06e20
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
-PKG_BUILD_DEPENDS:=protobuf/host
+PKG_BUILD_PARALLEL:=1
+
+PKG_BUILD_DEPENDS:=protobuf
 
 include $(INCLUDE_DIR)/package.mk
+
+#PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
+#define Build/Prepare
+#	rm -r $(PKG_BUILD_DIR)
+#	mkdir -p $(PKG_BUILD_DIR)
+#	$(CP) /home/markus/svn/open-lighting/** $(PKG_BUILD_DIR)/
+#endef
 
 define Package/ola
   SECTION:=ola
   CATEGORY:=Open Lighting Architecture
   TITLE:=Open Lighting Architecture Daemon
   URL:=http://code.google.com/p/linux-lighting/
-  DEPENDS:=+libartnet +libprotobuf +libmicrohttpd +libusb-1.0 +libuuid +libstdcpp +libpthread +librt
+  DEPENDS:=+libartnet +protobuf +libmicrohttpd +libusb-1.0 +libuuid +libstdcpp +libpthread +librt +zlib +libncurses
 endef
 
 define Package/ola/description
   OLA (Open Lighting Architecture) is a framework that allows applications to 
   send and receive DMX512, using various hardware devices and 'DMX over IP'
   protocols. It enables software controllers talk to DMX hardware.
+endef
+
+define Build/Configure
+  $(call Build/Configure/Default,--disable-dependency-tracking --disable-static --disable-slp --disable-root-check --disable-fatal-warnings --disable-unittests)
+endef
+
+define Build/InstallDev
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/ola $(1)/usr/include/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/olad $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 define Package/ola/install
